@@ -1,0 +1,236 @@
+打開 CMD 終端機 先用指令 cd Desktop 移到桌面
+再來 cd API 到這個資料夾裡面
+然後填入指令 npm init
+描述的話 description: This is a weather website 這樣打
+package.json 裡面的 author: "" 裡面填入自己的英文名
+再來到終端機下載要用到的模組 填入 npm install express ejs nodemon
+在 API 資料夾裡面 在創建一個 public 的資料夾 還有 views 的資料夾
+再到 public 資料夾裡面創建一個資料夾叫 styles 然後再 styles裡面 創建 style.scss 的檔案  
+
+
+//////////////////////////////
+開一個 index.html 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body></body>
+<script src="./app.js"></script>
+</html>
+
+/////////////////////////////////
+/////////////////////////////////
+
+///////////////////////////////////
+
+在style.scss 裡面 做一個簡單的程式碼 
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+之後再 Watch Sass 要記得唷
+
+///////////////////////////////////
+//////////////////////////////////
+有這些之後 再到 views 資料夾裡面 創建一個 inedx.ejs 的檔案 還有一個 weather.ejs 的檔案
+再來就到 app_api_server.js 裡面開始填入程式碼
+之後再打開 index.ejs 填入程式碼
+
+//////////////////////////////////////////
+//////////////////////////////////////////
+
+app.js 程式碼部分起初先打
+
+// let myKey = "c418a85ade31afc0e64116bb5d9faca1";
+// let url = `http://api.openweathermap.org/data/2.5/weather?q=${city},&appid=${myKey}`;
+// 主要執行這個檔案 然後再去看網頁 http://localhost:3000/ (網址)
+// 記得在創建 views 資料夾  一定要打對加 s 不然會有問題
+
+const express = require("express");
+const app = express();
+const ejs = require("ejs");
+
+app.use(express.static("public"));
+app.set("view engine", "ejs");
+
+// 創建一個首頁
+app.get("/", (req, res) => {
+  res.render("index.ejs");
+});
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000.");
+});
+
+
+
+index.ejs 的部分
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="/styles/style.css"> <!-- 前面的 views 的路徑要移除掉不要寫進來 記得在創建 views 資料夾 一定要打對加 s 不然會有問題 -->
+</head>
+<body>
+    <h1>This is the homepage.</h1>
+</body>
+</html>
+
+
+依照順序看下來唷 ---------------------------
+-----------------------------------------
+---------------------------------------
+
+之後回到 app.js 再繼續打程式碼
+把這邊程式碼 套用到可以用天氣 
+
+// 主要執行這個檔案 然後再去看網頁 http://localhost:3000/ (網址)
+// 記得在創建 views 資料夾  一定要打對加 s 不然會有問題
+
+const express = require("express");
+const app = express();
+const ejs = require("ejs");
+const https = require("https"); // 導入 https 記得 不能用 http 要加 s
+
+// 天氣 api key
+const myKey = "c418a85ade31afc0e64116bb5d9faca1";
+
+// h to cel 溫度函式
+function ktoC(k) {
+  return (k - 273.15).toFixed(2); // 改成小數點後兩位數
+}
+
+// middleware
+app.use(express.static("public"));
+app.set("view engine", "ejs");
+
+// 創建一個首頁
+app.get("/", (req, res) => {
+  res.render("index.ejs");
+});
+
+// 記得連到網站  https 一定要打 https 加 s 不然會有錯誤
+// 導用天氣的 api 先到 Postman 將 URL 的網址貼上去 Get 把 city 跟 key 都複製貼到 Postman 之後 Send 就可看清楚資料是什麼哪些
+// 使用這些資料來做虛擬網頁
+app.get("/:city", (req, res) => {
+  let { city } = req.params; // 放入物件 因為 params 是個 {}
+  let url = `https://api.openweathermap.org/data/2.5/weather?q=${city},&appid=${myKey}`;
+
+  // get request mode by node.js
+  https
+    .get(url, (response) => {
+      console.log("statusCode:", response.statusCode); // 出現 200 的碼 就是沒問題 400 就是有問題
+      console.log("headers:", response.headers); // 裡面有很多資訊
+
+      response.on("data", (d) => {
+        let djs = JSON.parse(d); // 這個 JSON 原本就是一個 async function 所以不用多加
+        // 再來有了天氣的資訊 就來使用 weather.ejs 導裡面做設定
+        let { temp } = djs.main; // 導入網站天氣
+        let newTemp = ktoC(temp); // 把上面函式帶進來
+        res.render("weather.ejs", { djs, newTemp }); // 在把新用的 newTeap 用進來
+      });
+    })
+    .on("error", (e) => {
+      console.log(e);
+    });
+});
+
+// 在 node.js 這個 fetch 是不存在的喔
+// 那如何解決這個問題 到網址 node.js https://nodejs.org/dist/latest-v20.x/docs/api/https.html
+// 在文件-HTTPS-https.get(url[, options][, callback]) 這個可以使用 以下有方法教你使用
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000.");
+});
+
+
+
+////////////////////////////////////
+//////////////////////////////////
+
+這個指令我在 3000 後面 打 /Taipei cmd 會出現 { city: 'Taipei' }
+
+再到 weather.ejs 裡面編寫程式碼
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 以網頁 用 Postman send 處理的資訊 來使用 城市名字 國家名字 網頁名字出現 Taipei TW  -->
+    <title> <%= djs.name %> <%= djs.sys.country %> </title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <h1><%= djs.name %> Weather Now</h1> <!-- 網頁出現 Taipei Weather Now -->
+    <table>
+        <tr>
+            <td>Main Weather</td> <!-- 天氣-->
+            <td><%= djs.weather[0].main %> </td> <!-- 他是一個 array 裡面還有個 object 所以要這樣使用 [0] 去抓裡面的物件 -->
+        </tr>
+        <tr>
+            <td>Weather Description</td> <!-- 天氣描述 -->
+            <td><%= djs.weather[0].description %></td>
+        </tr>
+        <tr>
+            <td>Temperature</td>
+            <td><%= newTemp %></td> <!-- 在把 app.js 的設定套用過來 顯示溫度 -->
+        </tr>
+        <tr>
+            <td>Wind</td>
+            <td><%= djs.wind.speed %></td> <!-- 設定他的風速 -->
+        </tr>
+    </table>
+</body>
+</html>
+
+
+/////////////////////////////////
+/////////////////////////////////
+////////////////////////////////
+
+再來加一下樣式 改 scss
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgba(49, 45, 45, 0.555);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    table,
+    tr,
+    td {
+        border: 1px solid white;
+        border-collapse: collapse; // 將表格欄位邊框合併，讓表格變得更美化
+    }
+
+    td {
+        padding: 0.25rem 0.5rem;
+    }
+    table {
+        font-size: 1.25rem;
+    }
+
+}
+
+
+
+

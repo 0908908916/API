@@ -1,0 +1,25 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgba(49, 45, 45, 0.555);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body table,
+body tr,
+body td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+body td {
+  padding: 0.25rem 0.5rem;
+}
+body table {
+  font-size: 1.25rem;
+}/*# sourceMappingURL=style.css.map */

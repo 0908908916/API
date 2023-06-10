@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 以網頁 用 Postman send 處理的資訊 來使用 城市名字 國家名字 網頁名字出現 Taipei TW  -->
+    <title> <%= djs.name %> <%= djs.sys.country %> </title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <h1><%= djs.name %> Weather Now</h1> <!-- 網頁出現 Taipei Weather Now -->
+    <table>
+        <tr>
+            <td>Main Weather</td> <!-- 天氣-->
+            <td><%= djs.weather[0].main %> </td> <!-- 他是一個 array 裡面還有個 object 所以要這樣使用 [0] 去抓裡面的物件 -->
+        </tr>
+        <tr>
+            <td>Weather Description</td> <!-- 天氣描述 -->
+            <td><%= djs.weather[0].description %></td>
+        </tr>
+        <tr>
+            <td>Temperature</td>
+            <td><%= newTemp %></td> <!-- 在把 app.js 的設定套用過來 顯示溫度 -->
+        </tr>
+        <tr>
+            <td>Wind</td>
+            <td><%= djs.wind.speed %></td> <!-- 設定他的風速 -->
+        </tr>
+    </table>
+</body>
+</html>

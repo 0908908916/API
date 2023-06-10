@@ -1,0 +1,28 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgba(49, 45, 45, 0.555);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    table,
+    tr,
+    td {
+        border: 1px solid white;
+        border-collapse: collapse; // 將表格欄位邊框合併，讓表格變得更美化
+    }
+
+    td {
+        padding: 0.25rem 0.5rem;
+    }
+    table {
+        font-size: 1.25rem;
+    }
+
+}

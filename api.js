@@ -1,0 +1,45 @@
+// API
+//應用程式介面的意思，可以設定一個工具製作網站
+
+// endpoint, path, query
+// 運用這個 JokeAPI 網站 https://sv443.net/jokeapi/v2/
+// URL 例:https://v2.jokeapi.dev/joke/Any 就把它叫做一個 endpoint 來從 API 資料庫來獲取一些笑話
+// https://v2.jokeapi.dev/joke/Any 這個網址為例 Any 為 path 的改變
+// https://v2.jokeapi.dev/joke/Any?blacklistFlags=political 再來 最尾巴就是一段  query
+
+// 如何用 js 拿到 jokeapi 要先到 新方法較好用 Fetch API 這個 https://developer.mozilla.org/zh-TW/docs/Web/API/Fetch_API
+
+// async function getJoke() {
+//   let data = await fetch("https://v2.jokeapi.dev/joke/Any?type=single"); // 要連接的api 網址(URL)
+//   let parseData = await data.json(); // 要經過這個步驟 才能獲得你想要的 data
+//   console.log(parseData);
+// }
+
+// getJoke();
+
+//--------------------------
+//--------------------------
+
+// 跟以上分開
+// 再來要有一把鑰匙才能使用這個 api 去找 Weather API  https://openweathermap.org/api
+//這個提供了 免費的 提供20萬個地區天氣是甚麼 如果你傳送 requset 他就會回傳給你這個地區天氣如何
+// 一定要登入才能拿到 api key 註冊完 可以點到 自己的api 他就會有個 key 這樣
+// 再到網站的 api 可以獲得很多的資訊 要使用的話 例如: 找到要用的 名稱: Current Weather Data
+// 然後點他的 API doc 點進去之後他就會說有好幾種使用方式 假設我們要用他的  API call
+// 之後把下面那串指令碼複製起來再貼上 {state code} 等這邊不用複製造下面的程式碼使用 要用 ` ` 當字串數字左上方 1 鍵左邊
+// 把?後面的改掉 叫  q = ${}  他是放一個city name 後面的 移除 API key 一樣一個 ${} 裡面就要放我們得鑰匙碼 原本長 http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+let myKey = "c418a85ade31afc0e64116bb5d9faca1";
+let city = prompt("請輸入地區看你的天氣"); // 讓他出現一個可以輸入的值也可以
+// let city = "Taipei"; // 創一個變數 放到下面 看有沒有甚麼地區的天氣
+let url = `https://api.openweathermap.org/data/2.5/weather?q=${city},&appid=${myKey}`;
+
+// 再來獲得這個天氣
+async function getWeather() {
+  let d = await fetch(url);
+  let dj = await d.json();
+  console.log(dj);
+}
+
+getWeather();
+
+// 以上連接也可以把它放入你的 html 裡面
